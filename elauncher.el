@@ -1,4 +1,4 @@
-;;; elauncher.el --- a                               -*- lexical-binding: t; -*-
+;;; elauncher --- 
 
 ;; Copyright (C) 2026  
 
@@ -23,14 +23,13 @@
 ;;(elauncher:defexplorer elauncher:open-home-directory "~" ) ; HOMEの表示
 ;;(elauncher:defapplication run-calc "calc") ; calc.exeの起動
 
-
 ;;; Code:
 
 (defun elauncher:open-directory (&optional directory)
    (when (string-equal system-type "windows-nt")
      (let ((dir (or directory default-directory)))
        (message "Opend: %s" dir)
-       (w32-shell-execute "explore" dir))))
+       (w32-shell-execute "explore" dir ))))
 
 (defun elauncher:run-application (file &optional parameters)
   (when (string-equal system-type "windows-nt")
@@ -48,6 +47,7 @@
      (elauncher:run-application ,file ,parameters)))
 
 
+(elauncher:defexplorer elauncher:open-default-directory default-directory) ; default-directoryの表示
 
 (provide 'elauncher)
 ;;; elauncher ends here
