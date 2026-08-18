@@ -25,29 +25,31 @@
 
 ;;; Code:
 
+;;;###autoload
 (defun elauncher:open-directory (&optional directory)
    (when (string-equal system-type "windows-nt")
      (let ((dir (or directory default-directory)))
        (message "Opend: %s" dir)
        (w32-shell-execute "explore" dir ))))
 
+;;;###autoload
 (defun elauncher:run-application (file &optional parameters)
   (when (string-equal system-type "windows-nt")
     (message "Opend: %s %s" file parameters)
     (w32-shell-execute "open" file parameters)))   
 
+;;;###autoload
 (defmacro elauncher:defexplorer (name directory)
   `(defun ,name ()
      (interactive)
      (elauncher:open-directory ,directory)))
 
+;;;###autoload
 (defmacro elauncher:defapplication (name file &optional parameters)
   `(defun ,name ()
      (interactive)
      (elauncher:run-application ,file ,parameters)))
 
-
-(elauncher:defexplorer elauncher:open-default-directory default-directory) ; default-directoryの表示
 
 (provide 'elauncher)
 ;;; elauncher ends here
