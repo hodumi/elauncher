@@ -27,30 +27,32 @@
 
 ;;;###autoload
 (defun elauncher:open-directory (&optional directory)
-   (when (string-equal system-type "windows-nt")
-     (let ((dir (or directory default-directory)))
-       (message "Opend: %s" dir)
-       (w32-shell-execute "explore" dir ))))
+  "Open DIRECTORY (or `default-directory') in Windows Explorer."
+  (when (eq system-type 'windows-nt)
+    (let ((dir (or directory default-directory)))
+      (message "Opened: %s" dir)
+      (w32-shell-execute "explore" dir))))
 
 ;;;###autoload
 (defun elauncher:run-application (file &optional parameters)
-  (when (string-equal system-type "windows-nt")
-    (message "Opend: %s %s" file parameters)
-    (w32-shell-execute "open" file parameters)))   
+  "Run FILE with optional PARAMETERS on Windows."
+  (when (eq system-type 'windows-nt)
+    (message "Opened: %s %s" file parameters)
+    (w32-shell-execute "open" file parameters)))
 
 ;;;###autoload
 (defmacro elauncher:defexplorer (name directory)
+  "Define a NAME function that opens DIRECTORY with Explorer."
   `(defun ,name ()
      (interactive)
      (elauncher:open-directory ,directory)))
 
 ;;;###autoload
 (defmacro elauncher:defapplication (name file &optional parameters)
+  "Define a NAME function that launches FILE with optional PARAMETERS."
   `(defun ,name ()
      (interactive)
      (elauncher:run-application ,file ,parameters)))
 
-
 (provide 'elauncher)
 ;;; elauncher ends here
-
