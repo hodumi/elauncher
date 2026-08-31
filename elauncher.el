@@ -73,7 +73,5 @@
   (interactive)
   (funcall (intern (completing-read "Apps: " *elauncher:defined-apps*))))
 
-
-
 (provide 'elauncher)
 ;;; elauncher ends here
