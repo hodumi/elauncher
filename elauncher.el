@@ -25,6 +25,9 @@
 
 ;;; Code:
 
+(defvar *elauncher:defined-explorers* nil)
+(defvar *elauncher:defined-apps* nil)
+
 ;;;###autoload
 (defun elauncher:open-directory (&optional directory)
   "Open DIRECTORY (or `default-directory') in Windows Explorer."
@@ -43,19 +46,34 @@
 ;;;###autoload
 (defmacro elauncher:defexplorer (name directory)
   "Define a NAME function that opens DIRECTORY with Explorer."
-  `(defun ,name ()
-     (interactive)
-     (elauncher:open-directory ,directory)))
+  `(prog1 (defun ,name ()
+	    (interactive)
+	    (elauncher:open-directory ,directory))
+     (push (quote ,name) *elauncher:defined-explorers*)
+     ))
 
 ;;;###autoload
 (defmacro elauncher:defapplication (name file &optional parameters)
   "Define a NAME function that launches FILE with optional PARAMETERS."
-  `(defun ,name ()
-     (interactive)
-     (elauncher:run-application ,file ,parameters)))
+  `(prog1
+       (defun ,name ()
+	 (interactive)
+	 (elauncher:run-application ,file ,parameters))
+     (push (quote ,name) *elauncher:defined-apps*)
+     ))
+
 
 ;;;###autoload
-(elauncher:defexplorer elauncher:open-default-directory default-directory) ; default-directoryの表示
+(defun elauncher:explorer-line ()
+  (interactive)
+  (funcall (intern (completing-read "Apps: " *elauncher:defined-explorers*))))
+
+;;;###autoload
+(defun elauncher:app-line ()
+  (interactive)
+  (funcall (intern (completing-read "Apps: " *elauncher:defined-apps*))))
+
+
 
 (provide 'elauncher)
 ;;; elauncher ends here
